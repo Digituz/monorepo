@@ -1,6 +1,6 @@
 {
   "name": "@digituz/monorepo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "NPM package to manage monorepos.",
   "main": "src/index.js",
   "scripts": {},
