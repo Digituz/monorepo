@@ -1,0 +1,26 @@
+{
+  "name": "@digituz/monorepo",
+  "version": "0.0.1",
+  "description": "NPM package to manage monorepos.",
+  "main": "src/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Digituz/monorepo.git"
+  },
+  "keywords": [
+    "monorepos"
+  ],
+  "author": "Bruno Krebs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Digituz/monorepo/issues"
+  },
+  "homepage": "https://github.com/Digituz/monorepo#readme",
+  "dependencies": {
+    "watch": "^1.0.2"
+  },
+  "bin": {
+    "monorepo": "src/index.js"
+  }
+}
