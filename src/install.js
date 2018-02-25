@@ -23,7 +23,7 @@ function install() {
     if (!installingLocalPackage) {
       installExternalPackage(pkg, destinationPkg);
     } else {
-      // installInternalPackage(pkg, destinationPkg);
+      installInternalPackage(pkg, destinationPkg);
     }
   });
 }
