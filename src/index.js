@@ -1,8 +1,9 @@
 #! /usr/bin/env node
 
-const fs = require('fs');
 const { spawn } = require('child_process');
-const watch = require('watch');
+
+const dev = require('./dev');
+const util = require('./util');
 
 const command = process.argv[2];
 const pkg = process.argv[3];
@@ -25,7 +26,7 @@ function install() {
     process.exit(1);
   }
 
-  mapLocalPackages().then(localPackages => {
+  util.mapLocalPackages().then(localPackages => {
     const destinationPackageExists = localPackages.includes(destinationPkg);
     if (!destinationPackageExists) {
       console.error('To use this script, type: node src/monorepo install some-pkg destination-pkg');
@@ -38,22 +39,6 @@ function install() {
     } else {
       installInternalPackage(pkg, destinationPkg);
     }
-  });
-}
-
-function mapLocalPackages() {
-  return new Promise((resolve) => {
-    let pointers = fs.readdirSync(process.cwd());
-
-    pointers = pointers.filter((pointer) => {
-      const stat = fs.lstatSync(`${process.cwd()}/${pointer}`);
-      if (stat.isDirectory() && pointer !== 'node_modules') {
-        return pointer;
-      }
-      return null;
-    });
-
-    resolve(pointers);
   });
 }
 
@@ -104,34 +89,6 @@ function installExternalPackage(pkg, destinationPkg) {
   install.on('close', (code) => {
     if (code === 0) {
       console.log('External package properly installed.');
-    }
-  });
-}
-
-function dev() {
-  mapLocalPackages().then(localPackages => {
-    localPackages.forEach((pkg) => {
-      generateDists(pkg);
-      watch.createMonitor(`${process.cwd()}/${pkg}/src`, (monitor) => {
-        monitor.on("changed", () => {
-          generateDists(pkg);
-        });
-      })
-    });
-  });
-}
-
-function generateDists(pkg) {
-  console.log(`Generating dist for ${pkg}`);
-  const generate = spawn('npm', ['run', 'prepublishOnly'], { cwd: `${process.cwd()}/${pkg}`});
-
-  generate.stderr.on('data', (data) => {
-    console.error(data.toString());
-  });
-
-  generate.on('close', (code) => {
-    if (code === 0) {
-      console.log(`Done generating dist for ${pkg}`);
     }
   });
 }
