@@ -4,8 +4,9 @@ const util = require('./util');
 
 module.exports = publish;
 
-function publish(type) {
+function publish() {
   const typesAvailable = ['patch', 'minor', 'major'];
+  const type = process.argv[3];
   if (!type || !typesAvailable.includes(type)) {
     console.log('To publish a new version, choose one of the following types: patch, minor, major.');
     process.exit(1);
