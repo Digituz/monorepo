@@ -5,6 +5,7 @@ const { spawn } = require('child_process');
 const dev = require('./dev');
 const install = require('./install');
 const publish = require('./publish');
+const test = require('./test');
 
 const command = process.argv[2];
 
@@ -15,6 +16,8 @@ switch (command) {
     return dev();
   case 'publish':
     return publish();
+  case 'test':
+    return test();
   default:
     console.log('Unknown option');
     process.exit(1);

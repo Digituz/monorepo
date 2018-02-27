@@ -22,7 +22,6 @@ function publish() {
 
       bump.stderr.on('data', (data) => {
         console.error(data.toString());
-        cb(data.toString());
       });
 
       bump.on('close', (code) => {
