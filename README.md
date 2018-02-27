@@ -12,8 +12,10 @@ npm i -D @digituz/monorepo
 
 After that, you can start using the `monorepo` CLI. For now, the available options are:
 
-* `dev`: this option watches for changes on `src` directories and generates distribution artifacts by calling the `prepublishOnly` script.
-* `install`: this option checks if the desired package belongs to the current monorepo and, if so, installs and links it into the desntination package.
+* `dev`: This option watches for changes on `src` directories and generates distribution artifacts by calling the `prepublishOnly` script.
+* `install`: This option checks if the desired package belongs to the current monorepo and, if so, installs and links it into the desntination package.
+* `publish`: This option takes another argument (must be `patch`, `minor`, or `major`) and bumps internal packages accordingly. After that, it publishes the new versions.
+* `test`: This option goes through all internal packages and run `npm test` on them.
 
 Here, you can see a few examples on how to use it:
 
