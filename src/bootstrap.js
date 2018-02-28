@@ -18,6 +18,8 @@ const mergeDefinitionAndInstall = (pkg, cb) => {
   const packageTemplate = require(`${process.cwd()}/package.json`);
   const packageExt = require(`${process.cwd()}/${pkg}/package.ext.json`);
 
+  delete packageTemplate.private;
+
   const defaultScripts = packageTemplate.scripts;
   const extScripts = packageExt.scripts;
 
