@@ -1,6 +1,6 @@
 const { writeFileSync } = require('fs');
 const { spawn } = require('child_process');
-const util = require('./util');
+const util = require('../util');
 
 module.exports = bootstrap;
 

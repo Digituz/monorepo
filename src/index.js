@@ -2,12 +2,12 @@
 
 const { spawn } = require('child_process');
 
-const bootstrap = require('./bootstrap');
-const dev = require('./dev');
+const bootstrap = require('./scripts/bootstrap');
+const dev = require('./scripts/dev');
 // const install = require('./install');
-const publish = require('./publish');
-const test = require('./test');
-const run = require('./run');
+const publish = require('./scripts/publish');
+const test = require('./scripts/test');
+const run = require('./scripts/run');
 
 const command = process.argv[2];
 

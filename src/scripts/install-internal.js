@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-const installExternalPackage = require('install-external');
+const installExternalPackage = require('scripts/install-external');
 
 module.exports = installInternalPackage;
 

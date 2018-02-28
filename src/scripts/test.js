@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 const bootstrap = require('./bootstrap');
-const util = require('./util');
+const util = require('../util');
 
 module.exports = test;
 
