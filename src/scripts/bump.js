@@ -12,7 +12,7 @@ function bump(pkg, type, cb) {
     return cb(`To bump, please, inform the package name (-p option) and the bump type (-b option).`);
   }
 
-  const bump = spawn('npm', ['version', type], { cwd: `${process.cwd()}/${pkg}`});
+  const bump = spawn('npm', ['version', type, '--no-git-tag-version'], { cwd: `${process.cwd()}/${pkg}`});
 
   bump.stdout.on('data', (data) => {
     console.log(data.toString());
