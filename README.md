@@ -16,12 +16,13 @@ npm i -D @digituz/monorepo
 
 After that, you can start using the `monorepo` CLI. For now, the available options are:
 
-* `bootstrap`: This options merges the main `package.json` file with the `package.ext.json` file
-provided by the package and installs its dependencies.
-* `bump`: This option takes the bump type (must be `patch`, `minor`, or `major`)
-and bumps the package accordingly.
-* `publish`: This option publishes new versions to NPM.
-* `test`: This option runs `npm test` on a package.
+* `bootstrap`: Merges the main `package.json` file with the `package.ext.json` file
+provided by the package and installs dependencies.
+* `bump`: Takes the bump type (must be `patch`, `minor`, or `major`) and bumps the package accordingly.
+* `clean`: Removes main `node_modules` directory and then removes `node_modules` and `package.json` from internal packages.
+* `publish`: Publishes new versions to NPM.
+* `runScript`: Runs a script on one or more internal packages.
+* `test`: Runs `npm test` on one or more internal packages.
 
 Here, you can see a few examples on how to use it:
 
