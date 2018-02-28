@@ -1,31 +1,29 @@
 const { spawn } = require('child_process');
-const bootstrap = require('./bootstrap');
-const util = require('../util');
+const { logError, logSuccess } = require('../util');
 
 module.exports = test;
 
-function test() {
-  util.mapLocalPackages().then(localPackages => {
-    localPackages.forEach((pkg) => {
-      bootstrap(pkg, () => {
-        const npmTest = spawn('npm', ['test'], { cwd: `${process.cwd()}/${pkg}`});
+function test(pkg, cb) {
+  if (!pkg) {
+    return cb(`To run test, please, inform the package name (-p option).`);
+  }
 
-        npmTest.stdout.on('data', (data) => {
-          console.log(data.toString());
-        });
+  const npmTest = spawn('npm', ['test'], { cwd: `${process.cwd()}/${pkg}`});
 
-        npmTest.stderr.on('data', (data) => {
-          console.error(data.toString());
-        });
+  npmTest.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
 
-        npmTest.on('close', (code) => {
-          if (code === 0) {
-            console.log(`${pkg} is good to go.`);
-          } else {
-            console.log(`Oooops, something went wrong with ${pkg}.`);
-          }
-        });
-      });
-    });
+  npmTest.stderr.on('data', (data) => {
+    logError(data.toString());
+  });
+
+  npmTest.on('close', (code) => {
+    if (code === 0) {
+      logSuccess(`${pkg} is good to go.`);
+      cb();
+    } else {
+      cb(`Oooops, something went wrong while testing ${pkg}.`);
+    }
   });
 }

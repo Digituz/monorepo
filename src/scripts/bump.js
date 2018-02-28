@@ -1,6 +1,7 @@
 const { writeFileSync } = require('fs');
 const os = require('os');
 const { spawn } = require('child_process');
+const { logError, logSuccess } = require('../util');
 
 const typesAvailable = ['patch', 'minor', 'major'];
 
@@ -18,13 +19,13 @@ function bump(pkg, type, cb) {
   });
 
   bump.stderr.on('data', (data) => {
-    console.error(data.toString());
+    logError(data.toString());
   });
 
   bump.on('close', (code) => {
     if (code === 0) {
       updatePackageExtVersion(pkg);
-      console.log(`The ${type} bumping on ${pkg} worked just fine.`);
+      logSuccess(`The ${type} bumping on ${pkg} worked just fine.`);
       cb();
     } else {
       cb(`Something went wrong on the ${type} bumping of the ${pkg} package. Please, check logs above.`);

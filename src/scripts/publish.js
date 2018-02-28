@@ -1,4 +1,5 @@
 const { spawn } = require('child_process');
+const { logError, logSuccess } = require('../util');
 
 module.exports = publish;
 
@@ -16,12 +17,12 @@ function publish(pkg, cb) {
   });
 
   publish.stderr.on('data', (data) => {
-    console.error(data.toString());
+    logError(data.toString());
   });
 
   publish.on('close', (code) => {
     if (code === 0) {
-      console.log(`Published new ${pkg} version.`);
+      logSuccess(`Published new ${pkg} version.`);
       cb();
     } else {
       cb(`An error occurred while publishing new ${pkg} version. Please, check logs.`);

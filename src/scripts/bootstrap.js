@@ -1,5 +1,6 @@
 const { writeFileSync } = require('fs');
 const { spawn } = require('child_process');
+const { logError, logSuccess } = require('../util');
 
 module.exports = bootstrap;
 
@@ -47,12 +48,12 @@ function bootstrap(pkg, cb) {
   });
 
   install.stderr.on('data', (data) => {
-    console.error(data.toString());
+    logError(data.toString());
   });
 
   install.on('close', (code) => {
     if (code === 0) {
-      console.log(`${pkg} dependencies installed.`);
+      logSuccess(`${pkg} dependencies installed.`);
       cb();
     } else {
       cb(`Oooops, something went wrong while installing ${pkg} dependencies.`);

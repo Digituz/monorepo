@@ -2,7 +2,9 @@ const fs = require('fs');
 
 module.exports = {
   exitOnError,
+  logError,
   logOnError,
+  logSuccess,
   mapLocalPackages,
 };
 
@@ -13,10 +15,18 @@ function exitOnError(err) {
   }
 }
 
+function logError(text) {
+  console.log('\x1b[31m%s\x1b[0m', text);
+}
+
 function logOnError(err) {
   if (err) {
-    console.error(err);
+    logError(err);
   }
+}
+
+function logSuccess(text) {
+  console.log('\x1b[32m%s\x1b[0m', text);
 }
 
 function mapLocalPackages() {
