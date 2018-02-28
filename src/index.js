@@ -5,6 +5,7 @@ const { logOnError, mapLocalPackages } = require('./util');
 
 const bootstrap = require('./scripts/bootstrap');
 const bump = require('./scripts/bump');
+const clean = require('./scripts/clean');
 const publish = require('./scripts/publish');
 const test = require('./scripts/test');
 
@@ -40,6 +41,8 @@ function executeCommand(command, packages, args) {
           }
         });
       });
+    case 'clean':
+      return clean();
     case 'publish':
       return packages.forEach((pkg) => {
         bootstrap(pkg, (err) => {
