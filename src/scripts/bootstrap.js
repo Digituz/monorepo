@@ -1,4 +1,4 @@
-const { writeFileSync } = require('fs');
+const { writeFileSync, existsSync } = require('fs');
 const { spawn, spawnSync } = require('child_process');
 const { logError, logSuccess } = require('../util');
 
@@ -53,14 +53,17 @@ function bootstrap(pkg, cb) {
 }
 
 function linkParentBin(pkg, cb) {
+  const destination = `${process.cwd()}/${pkg}/node_modules`;
+
+  if (existsSync(`${destination}/.bin`)) return cb();
+
   const parentBin = `${process.cwd()}/node_modules/.bin`;
-  const childBin = `${process.cwd()}/${pkg}/node_modules/.bin`;
 
   console.log(`Linking parent bin into ${pkg}.`);
 
   spawnSync('mkdir', ['-p', `${process.cwd()}/${pkg}/node_modules/`]);
 
-  const linkParent = spawn('ln', ['-s', parentBin, childBin], { cwd: `${process.cwd()}/${pkg}`});
+  const linkParent = spawn('ln', ['-s', parentBin, destination], { cwd: `${process.cwd()}/${pkg}`});
 
   linkParent.stdout.on('data', (data) => {
     console.log(data.toString());
