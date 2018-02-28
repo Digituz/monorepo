@@ -1,10 +1,11 @@
 #! /usr/bin/env node
 
 const commandLineArgs = require('command-line-args');
-const { logOnError } = require('./util');
+const { logOnError, mapLocalPackages } = require('./util');
 
 const bootstrap = require('./scripts/bootstrap');
 const bump = require('./scripts/bump');
+const publish = require('./scripts/publish');
 
 const argsDefinitions = [
   { name: 'run', alias: 'r', type: String, defaultOption: true },
@@ -16,16 +17,38 @@ const argsDefinitions = [
 
 const args = commandLineArgs(argsDefinitions);
 
-switch (args.run) {
-  case 'bootstrap':
-    return args.packages.forEach((pkg) => {
-      bootstrap(pkg, logOnError);
-    });
-  case 'bump':
-    return args.packages.forEach((pkg) => {
-      bump(pkg, args.bumpType, logOnError);
-    });
-  default:
-    console.log('Unknown option');
-    process.exit(1);
+if (args.packages) {
+  executeCommand(args.run, args.packages, args);
+} else {
+  mapLocalPackages().then(localPackages => {
+    executeCommand(args.run, localPackages, args);
+  });
+}
+
+function executeCommand(command, packages, args) {
+  switch (command) {
+    case 'bootstrap':
+      return packages.forEach((pkg) => {
+        bootstrap(pkg, logOnError);
+      });
+    case 'bump':
+      return packages.forEach((pkg) => {
+        bootstrap(pkg, (err) => {
+          if (!err) {
+            bump(pkg, args.bumpType, logOnError);
+          }
+        });
+      });
+    case 'publish':
+      return packages.forEach((pkg) => {
+        bootstrap(pkg, (err) => {
+          if (!err) {
+            publish(pkg, logOnError);
+          }
+        });
+      });
+    default:
+      console.log('Unknown option');
+      process.exit(1);
+  }
 }
