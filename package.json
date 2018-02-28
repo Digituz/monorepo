@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Digituz/monorepo#readme",
   "dependencies": {
+    "command-line-args": "^5.0.2",
     "watch": "^1.0.2"
   },
   "bin": {

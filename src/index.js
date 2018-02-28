@@ -1,30 +1,25 @@
 #! /usr/bin/env node
 
-const { spawn } = require('child_process');
+const commandLineArgs = require('command-line-args');
+const { logOnError } = require('./util');
 
-const bootstrap = require('./scripts/bootstrap');
-const dev = require('./scripts/dev');
-// const install = require('./install');
-const publish = require('./scripts/publish');
-const test = require('./scripts/test');
-const run = require('./scripts/run');
+const bump = require('./scripts/bump');
 
-const command = process.argv[2];
+const argsDefinitions = [
+  { name: 'run', alias: 'r', type: String, defaultOption: true },
+  { name: 'packages', alias: 'p', type: String, multiple: true },
+  { name: 'bumpType', alias: 'b', type: String },
+  { name: 'dependency', alias: 'd', type: String },
+  { name: 'script', alias: 's', type: String },
+];
 
-switch (command) {
-  case 'bootstrap':
-    return bootstrap();
-  // case 'install':
-  //   console.log(install);
-  //   return install();
-  case 'dev':
-    return dev();
-  case 'publish':
-    return publish();
-  case 'test':
-    return test();
-  case 'run':
-    return run();
+const args = commandLineArgs(argsDefinitions);
+
+switch (args.run) {
+  case 'bump':
+    return args.packages.forEach((pkg) => {
+      bump(pkg, args.bumpType, logOnError);
+    });
   default:
     console.log('Unknown option');
     process.exit(1);

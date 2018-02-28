@@ -1,14 +1,11 @@
 const { spawn } = require('child_process');
 const bootstrap = require('./bootstrap');
 
-const command = process.argv[3];
-const pkg = process.argv[4];
+module.exports = runScript;
 
-module.exports = run;
-
-function run() {
-  if (!command || !pkg) {
-    return console.log(`To run a command you must issue 'monorepo run some-command some-pkg'.`);
+function runScript(pkg, script, cb) {
+  if (!pkg || !script) {
+    return cb(`To run a script you must issue 'monorepo --run script --package some-pkg --script some-script'.`);
   }
 
   bootstrap(pkg, () => {

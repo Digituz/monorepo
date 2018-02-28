@@ -1,47 +1,30 @@
-const fs = require('fs');
 const { spawn } = require('child_process');
-const util = require('../util');
 
 module.exports = publish;
 
-function publish() {
-  const typesAvailable = ['patch', 'minor', 'major'];
-  const type = process.argv[3];
-  if (!type || !typesAvailable.includes(type)) {
-    console.log('To publish a new version, choose one of the following types: patch, minor, major.');
-    process.exit(1);
+function publish(pkg, cb) {
+  if (!pkg) {
+    return cb(`The 'publish' command expects one argument: the package name.`);
   }
 
-  util.mapLocalPackages().then(localPackages => {
-    localPackages.forEach((pkg) => {
-      const bump = spawn('npm', ['version', type], { cwd: `${process.cwd()}/${pkg}`});
+  console.log(`Publishing new ${pkg} version.`);
 
-      bump.stdout.on('data', (data) => {
-        console.log(data.toString());
-      });
+  const publish = spawn('npm', ['publish'], {cwd: `${process.cwd()}/${pkg}`});
 
-      bump.stderr.on('data', (data) => {
-        console.error(data.toString());
-      });
+  publish.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
 
-      bump.on('close', (code) => {
-        if (code === 0) {
-          console.log(`Bumped ${pkg}.`);
-          const publish = spawn('npm', ['publish'], { cwd: `${process.cwd()}/${pkg}`});
+  publish.stderr.on('data', (data) => {
+    console.error(data.toString());
+  });
 
-          publish.stdout.on('data', (data) => {
-            console.log(data.toString());
-          });
-
-          publish.stderr.on('data', (data) => {
-            console.error(data.toString());
-          });
-
-          publish.on('close', (code) => {
-            console.log(`Published new ${pkg} version.`);
-          });
-        }
-      });
-    });
+  publish.on('close', (code) => {
+    if (code === 0) {
+      console.log(`Published new ${pkg} version.`);
+      cb(null);
+    } else {
+      cb(`An error occurred while publishing new ${pkg} version. Please, check logs.`);
+    }
   });
 }
