@@ -1,3 +1,5 @@
+const { writeFileSync } = require('fs');
+const os = require('os');
 const { spawn } = require('child_process');
 
 const typesAvailable = ['patch', 'minor', 'major'];
@@ -21,10 +23,20 @@ function bump(pkg, type, cb) {
 
   bump.on('close', (code) => {
     if (code === 0) {
+      updatePackageExtVersion(pkg);
       console.log(`The ${type} bumping on ${pkg} worked just fine.`);
       cb();
     } else {
       cb(`Something went wrong on the ${type} bumping of the ${pkg} package. Please, check logs above.`);
     }
   });
+}
+
+function updatePackageExtVersion(pkg) {
+  const packageExt = require(`${process.cwd()}/${pkg}/package.ext.json`);
+  const packageLock = require(`${process.cwd()}/${pkg}/package-lock.json`);
+  writeFileSync(`${process.cwd()}/${pkg}/package.ext.json`, JSON.stringify({
+    ...packageExt,
+    version: packageLock.version
+  }, null, 2) + os.EOL);
 }
