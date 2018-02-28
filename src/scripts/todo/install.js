@@ -1,4 +1,4 @@
-const util = require('../util');
+const util = require('../../util');
 const installExternalPackage = require('./install-external');
 
 const command = process.argv[2];

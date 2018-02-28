@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-const bootstrap = require('./bootstrap');
+const bootstrap = require('../bootstrap');
 
 module.exports = runScript;
 
