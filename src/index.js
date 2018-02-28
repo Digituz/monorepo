@@ -11,20 +11,20 @@ const runScript = require('./scripts/runScript');
 const test = require('./scripts/test');
 
 const argsDefinitions = [
-  { name: 'run', alias: 'r', type: String, defaultOption: true },
+  { name: 'command', alias: 'c', type: String, defaultOption: true },
   { name: 'packages', alias: 'p', type: String, multiple: true },
   { name: 'bumpType', alias: 'b', type: String },
   { name: 'dependency', alias: 'd', type: String },
-  { name: 'script', alias: 's', type: String },
+  { name: 'runScript', alias: 'r', type: String },
 ];
 
 const args = commandLineArgs(argsDefinitions);
 
 if (args.packages) {
-  executeCommand(args.run, args.packages, args);
+  executeCommand(args.command, args.packages, args);
 } else {
   mapLocalPackages().then(localPackages => {
-    executeCommand(args.run, localPackages, args);
+    executeCommand(args.command, localPackages, args);
   });
 }
 
@@ -52,11 +52,11 @@ function executeCommand(command, packages, args) {
           }
         });
       });
-    case 'script':
+    case 'runScript':
       return packages.forEach((pkg) => {
         bootstrap(pkg, (err) => {
           if (!err) {
-            runScript(pkg, args.script, logOnError);
+            runScript(pkg, args.runScript, logOnError);
           }
         });
       });

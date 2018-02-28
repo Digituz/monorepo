@@ -5,7 +5,7 @@ module.exports = runScript;
 
 function runScript(pkg, script, cb) {
   if (!pkg || !script) {
-    return cb(`To run a script you must issue 'monorepo script -p some-pkg -s some-script'.`);
+    return cb(`To run a script you must issue 'monorepo runScript -r some-script -p some-pkg'.`);
   }
 
   const running = spawn('npm', ['run', script], { cwd: `${process.cwd()}/${pkg}`});
