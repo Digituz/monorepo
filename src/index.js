@@ -7,6 +7,7 @@ const bootstrap = require('./scripts/bootstrap');
 const bump = require('./scripts/bump');
 const clean = require('./scripts/clean');
 const publish = require('./scripts/publish');
+const runScript = require('./scripts/runScript');
 const test = require('./scripts/test');
 
 const argsDefinitions = [
@@ -48,6 +49,14 @@ function executeCommand(command, packages, args) {
         bootstrap(pkg, (err) => {
           if (!err) {
             publish(pkg, logOnError);
+          }
+        });
+      });
+    case 'script':
+      return packages.forEach((pkg) => {
+        bootstrap(pkg, (err) => {
+          if (!err) {
+            runScript(pkg, args.script, logOnError);
           }
         });
       });
