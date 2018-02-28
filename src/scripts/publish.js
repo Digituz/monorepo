@@ -4,7 +4,7 @@ module.exports = publish;
 
 function publish(pkg, cb) {
   if (!pkg) {
-    return cb(`The 'publish' command expects one argument: the package name.`);
+    return cb(`To publish, please, inform the package name (-p option).`);
   }
 
   console.log(`Publishing new ${pkg} version.`);
@@ -22,7 +22,7 @@ function publish(pkg, cb) {
   publish.on('close', (code) => {
     if (code === 0) {
       console.log(`Published new ${pkg} version.`);
-      cb(null);
+      cb();
     } else {
       cb(`An error occurred while publishing new ${pkg} version. Please, check logs.`);
     }
