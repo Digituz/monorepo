@@ -1,20 +1,13 @@
 const { writeFileSync } = require('fs');
 const { spawn } = require('child_process');
-const util = require('../util');
 
 module.exports = bootstrap;
 
 function bootstrap(pkg, cb) {
   if (!pkg) {
-    util.mapLocalPackages().then(localPackages => {
-      localPackages.forEach(mergeDefinitionAndInstall);
-    });
-    return;
+    return cb(`To bootstrap, please, inform the package name (-p option).`);
   }
-  mergeDefinitionAndInstall(pkg, cb);
-}
 
-const mergeDefinitionAndInstall = (pkg, cb) => {
   const packageTemplate = require(`${process.cwd()}/package.json`);
   const packageExt = require(`${process.cwd()}/${pkg}/package.ext.json`);
 
@@ -60,9 +53,9 @@ const mergeDefinitionAndInstall = (pkg, cb) => {
   install.on('close', (code) => {
     if (code === 0) {
       console.log(`${pkg} dependencies installed.`);
-      if (cb && typeof cb === 'function') cb();
+      cb();
     } else {
-      console.log(`Oooops, something went wrong while installing ${pkg} dependencies.`);
+      cb(`Oooops, something went wrong while installing ${pkg} dependencies.`);
     }
   });
-};
+}

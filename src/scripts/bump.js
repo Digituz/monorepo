@@ -22,7 +22,7 @@ function bump(pkg, type, cb) {
   bump.on('close', (code) => {
     if (code === 0) {
       console.log(`The ${type} bumping on ${pkg} worked just fine.`);
-      cb(null);
+      cb();
     } else {
       cb(`Something went wrong on the ${type} bumping of the ${pkg} package. Please, check logs above.`);
     }
