@@ -6,6 +6,7 @@ module.exports = {
   logOnError,
   logSuccess,
   mapLocalPackages,
+  parseVersion,
 };
 
 function exitOnError(err) {
@@ -43,4 +44,8 @@ function mapLocalPackages() {
 
     resolve(pointers);
   });
+}
+
+function parseVersion(version) {
+  return version.replace('v', '').trim();
 }

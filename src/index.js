@@ -31,43 +31,30 @@ if (args.packages) {
 function executeCommand(command, packages, args) {
   switch (command) {
     case 'bootstrap':
-      return packages.forEach((pkg) => {
-        bootstrap(pkg, logOnError);
-      });
+      Promise.all(packages.map(bootstrap)).catch(logOnError);
+      break;
     case 'bump':
-      return packages.forEach((pkg) => {
-        bootstrap(pkg, (err) => {
-          if (!err) {
-            bump(pkg, args.bumpType, logOnError);
-          }
-        });
+      Promise.all(packages.map(bootstrap)).then(() => {
+        bump(args.bumpType, logOnError);
       });
+      break;
     case 'clean':
       return clean();
     case 'publish':
-      return packages.forEach((pkg) => {
-        bootstrap(pkg, (err) => {
-          if (!err) {
-            publish(pkg, logOnError);
-          }
-        });
+      Promise.all(packages.map(bootstrap)).then(() => {
+        packages.forEach(pkg => publish(pkg, logOnError));
       });
+      break;
     case 'runScript':
-      return packages.forEach((pkg) => {
-        bootstrap(pkg, (err) => {
-          if (!err) {
-            runScript(pkg, args.runScript, logOnError);
-          }
-        });
+      Promise.all(packages.map(bootstrap)).then(() => {
+        packages.forEach(pkg => runScript(pkg, args.runScript, logOnError));
       });
+      break;
     case 'test':
-      return packages.forEach((pkg) => {
-        bootstrap(pkg, (err) => {
-          if (!err) {
-            test(pkg, logOnError);
-          }
-        });
+      Promise.all(packages.map(bootstrap)).then(() => {
+        packages.forEach(pkg => test(pkg, logOnError));
       });
+      break;
     default:
       console.log('Unknown option');
       process.exit(1);
