@@ -7,9 +7,6 @@ function clean() {
   spawnSync('rm', ['-rf', 'node_modules'], { cwd: `${process.cwd()}`});
 
   mapLocalPackages().then(packages => {
-    let pkgsCleaned = 0;
-    let calledback = false;
-
     packages.forEach(pkg => {
       const rmFiles = spawn('rm', ['-rf', 'package.json', 'node_modules'], { cwd: `${process.cwd()}/${pkg}`});
 
