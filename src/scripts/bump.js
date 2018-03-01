@@ -20,13 +20,17 @@ function bump(type, cb) {
     localPackages.forEach(pkg => {
       updatePackageExtVersion(pkg, newVersion);
     });
+
+    logSuccess(`The ${type} bumping worked just fine. New version: ${newVersion}`);
+
+    spawnSync('git', ['add', `.`], { cwd: process.cwd() });
+
+    spawnSync('git', ['commit', `-m`, `bumping packages to ${newVersion}`], { cwd: process.cwd() });
+
+    spawnSync('git', ['tag', `v${newVersion}`], { cwd: process.cwd() });
+
+    cb();
   });
-
-  logSuccess(`The ${type} bumping worked just fine. New version: ${newVersion}`);
-
-  spawnSync('git', ['tag', `v${newVersion}`], { cwd: `${process.cwd()}`});
-
-  cb();
 }
 
 function updatePackageExtVersion(pkg, version) {
