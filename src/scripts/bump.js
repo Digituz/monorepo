@@ -23,6 +23,9 @@ function bump(type, cb) {
   });
 
   logSuccess(`The ${type} bumping worked just fine. New version: ${newVersion}`);
+
+  spawnSync('git', ['tag', `v${newVersion}`], { cwd: `${process.cwd()}`});
+
   cb();
 }
 
