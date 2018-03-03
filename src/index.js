@@ -6,6 +6,7 @@ const { logOnError, mapLocalPackages } = require('./util');
 const bootstrap = require('./scripts/bootstrap');
 const bump = require('./scripts/bump');
 const clean = require('./scripts/clean');
+const link = require('./scripts/link');
 const publish = require('./scripts/publish');
 const runScript = require('./scripts/runScript');
 const test = require('./scripts/test');
@@ -40,6 +41,11 @@ function executeCommand(command, packages, args) {
       break;
     case 'clean':
       return clean();
+    case 'link':
+      Promise.all(packages.map(bootstrap)).then(() => {
+        packages.forEach(pkg => link(pkg, logOnError));
+      });
+      break;
     case 'publish':
       Promise.all(packages.map(bootstrap)).then(() => {
         packages.forEach(pkg => publish(pkg, logOnError));
