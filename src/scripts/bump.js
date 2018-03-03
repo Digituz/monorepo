@@ -18,7 +18,7 @@ function bump(type, cb) {
 
   mapLocalPackages().then(localPackages => {
     localPackages.forEach(pkg => {
-      updatePackageExtVersion(pkg, newVersion);
+      updatePackageFilesVersion(pkg, newVersion);
     });
 
     logSuccess(`The ${type} bumping worked just fine. New version: ${newVersion}`);
@@ -33,10 +33,16 @@ function bump(type, cb) {
   });
 }
 
-function updatePackageExtVersion(pkg, version) {
+function updatePackageFilesVersion(pkg, version) {
   const packageExt = require(`${process.cwd()}/${pkg}/package.ext.json`);
   writeFileSync(`${process.cwd()}/${pkg}/package.ext.json`, JSON.stringify({
     ...packageExt,
+    version,
+  }, null, 2) + os.EOL);
+
+  const packageLock = require(`${process.cwd()}/${pkg}/package-lock.json`);
+  writeFileSync(`${process.cwd()}/${pkg}/package-lock.json`, JSON.stringify({
+    ...packageLock,
     version,
   }, null, 2) + os.EOL);
 }
